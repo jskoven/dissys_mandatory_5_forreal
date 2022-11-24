@@ -6,7 +6,8 @@ option go_package = "https://github.com/jskoven/dissys_mandatory_5_forreal;repli
 
 
 service replication {
-    rpc bid (bidPackage) returns (confirmation);
+    rpc receivebid (bidPackage) returns (confirmation);
+    rpc result (empty) returns (resultPackage);
 }
 
 message bidPackage{
@@ -16,5 +17,12 @@ message bidPackage{
 
 message confirmation{
     bool confimration = 1;
+}
+
+message resultPackage{
+    int32 highestbid = 1;
+    string winner = 2;
+}
+message empty{
 
 }
