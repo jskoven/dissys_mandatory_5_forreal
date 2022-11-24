@@ -17,11 +17,14 @@ message bidPackage{
 
 message confirmation{
     bool confirmation = 1;
+    int32 currentPrice = 2;
+    string currentWinner = 3;
 }
 
 message resultPackage{
     int32 highestbid = 1;
     string winner = 2;
+    bool hasEnded = 3;
 }
 message empty{
 

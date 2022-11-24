@@ -1,4 +1,4 @@
-module github.com/jskoven/dissys_mandatory_5_forreal/replication
+module github.com/jskoven/dissys_mandatory_5_forreal
 
 go 1.19
 
