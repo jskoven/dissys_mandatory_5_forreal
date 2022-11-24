@@ -16,7 +16,7 @@ message bidPackage{
 }
 
 message confirmation{
-    bool confimration = 1;
+    bool confirmation = 1;
 }
 
 message resultPackage{
