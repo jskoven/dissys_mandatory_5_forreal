@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/jskoven/dissys_mandatory_5_forreal/replication"
 	"google.golang.org/grpc"
@@ -19,8 +20,16 @@ type bidder struct {
 }
 
 func main() {
+	f, err := os.OpenFile("logs.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
+	if err != nil {
+		log.Printf("Eror on opening file: %s", err)
+	}
+	log.SetOutput(f)
+	fmt.Println("Welcome to the auction!")
+	fmt.Println("To see results of current auction, simple type \"result\"")
+	fmt.Println("To bid on current auction, simple type \"bid\", press enter and then enter your amount")
+	fmt.Println("To start, please write your username:")
 
-	log.Println("Please insert username:")
 	Scanner := bufio.NewScanner(os.Stdin)
 	Scanner.Scan()
 	username := Scanner.Text()
@@ -41,42 +50,35 @@ func main() {
 
 		c := replication.NewReplicationClient(conn)
 		b.replicas[port] = c
-		log.Printf("Client connected to port %d \n", port)
+		log.Printf("Client %s connected to port %d \n", b.name, port)
+		fmt.Println()
 	}
 
 	for {
 		Scanner := bufio.NewScanner(os.Stdin)
 		Scanner.Scan()
-		MessageToBeSent := Scanner.Text()
+		MessageToBeSent := strings.ToLower(Scanner.Text())
 
 		switch MessageToBeSent {
 		case "result":
-			empty := replication.Empty{}
-			ap := replication.ResultPackage{}
-			for _, replica := range b.replicas {
-				if replica != nil {
-					resultPointer, _ := replica.Result(context.Background(), &empty)
-					ap.Highestbid = resultPointer.Highestbid
-					ap.Winner = resultPointer.Winner
-				}
-			}
-			if ap.Winner != "None have won yet!" {
-				log.Printf("Auction has been closed. The winner is %s with a bid of %d!", ap.Winner, ap.Highestbid)
+			result := b.result()
+			if result.HasEnded {
+				fmt.Printf("Auction has been closed. The winner is %s with a bid of %d! \n", result.Winner, result.Highestbid)
 			} else {
-				log.Printf("Current highest bid is %d from user %s", ap.Highestbid, ap.Winner)
+				fmt.Printf("Current highest bid is %d from user %s \n", result.Highestbid, result.Winner)
 			}
 		case "bid":
-			log.Println("How much do you wish to bid?")
+			fmt.Println("How much do you wish to bid?")
 			Scanner.Scan()
 			toBid := Scanner.Text()
 			toBidInInt, err := strconv.Atoi(toBid)
 			if err != nil {
-				log.Println("Bid failed, please try again with a whole number")
+				fmt.Println("Bid failed, please try again with a whole number")
 				continue
 			}
 			b.bid(toBidInInt)
 		case "exit":
-			log.Printf("Leaving auction...")
+			fmt.Println("Leaving auction...")
 			break
 		}
 
@@ -86,45 +88,51 @@ func main() {
 
 func (b *bidder) bid(bid int) {
 
+	log.Printf("User %s attempting to bid with bid %d\n", b.name, bid)
 	confPackage := replication.Confirmation{}
 	bp := replication.BidPackage{
 		Bid:    int32(bid),
 		Bidder: b.name,
 	}
-	for _, element := range b.replicas {
-		fmt.Println("Looped")
+	for index, element := range b.replicas {
 		if element != nil {
 			conf, err := element.Receivebid(context.Background(), &bp)
 			if err != nil {
-
+				log.Printf("## Replica number %d is down, skipping it.##\n", index)
 			} else {
 				confPackage.Confirmation = conf.Confirmation
 				confPackage.CurrentPrice = conf.CurrentPrice
 				confPackage.CurrentWinner = conf.CurrentWinner
+				confPackage.HasEnded = conf.HasEnded
 			}
 		}
 	}
-
-	switch confPackage.Confirmation {
-	case true:
-		log.Printf("%s has bid %d \n", b.name, bid)
-	case false:
-		log.Printf("Bid not high enough, current highest bid is: %d from user %s", confPackage.CurrentPrice, confPackage.GetCurrentWinner)
+	if !confPackage.HasEnded {
+		switch confPackage.Confirmation {
+		case true:
+			log.Printf("User %s has succesfully bid %d \n", b.name, bid)
+			fmt.Printf("You have succesfully bid %d \n", bid)
+		case false:
+			fmt.Printf("Bid not high enough, current highest bid is: %d from user %s\n", confPackage.CurrentPrice, confPackage.CurrentWinner)
+			log.Printf("User %s attempted to bid %d, but bid was not high enough. \n", b.name, bid)
+		}
+	} else {
+		fmt.Println("Auction has ended! See results for more information.")
 	}
 }
 
 func (b *bidder) result() replication.ResultPackage {
+	log.Printf("User %s attempting to request result from replicas.", b.name)
 	empty := replication.Empty{}
 	result := replication.ResultPackage{}
 
 	for _, element := range b.replicas {
-		fmt.Println("Looped")
 		answer, err := element.Result(context.Background(), &empty)
 		if err != nil {
-			fmt.Println("yo wtf")
 		}
 		result.Highestbid = answer.Highestbid
 		result.Winner = answer.Winner
+		result.HasEnded = answer.HasEnded
 	}
 
 	return result

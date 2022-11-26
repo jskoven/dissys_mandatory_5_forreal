@@ -1,0 +1,61 @@
+2022/11/26 14:48:21 Starting server...
+2022/11/26 14:48:21 Starting server...
+2022/11/26 14:48:21 Listening on port :9000
+2022/11/26 14:48:21 Listening on port :9001
+2022/11/26 14:48:22 Starting server...
+2022/11/26 14:48:22 Listening on port :9002
+2022/11/26 14:48:50 Client Johan connected to port 9000 
+2022/11/26 14:48:50 Client Johan connected to port 9001 
+2022/11/26 14:48:50 Client Johan connected to port 9002 
+2022/11/26 14:48:52 Client Jakob connected to port 9000 
+2022/11/26 14:48:52 Client Jakob connected to port 9001 
+2022/11/26 14:48:52 Client Jakob connected to port 9002 
+2022/11/26 14:48:55 User %!d(string=Johan) attempting to request result from replicas.
+2022/11/26 14:48:55 Replica #9000: Result requested from user, answering with result message.
+2022/11/26 14:48:55 Replica #9001: Result requested from user, answering with result message.
+2022/11/26 14:48:55 Replica #9002: Result requested from user, answering with result message.
+2022/11/26 14:49:02 User Johan attempting to bid with bid 500
+2022/11/26 14:49:02 Replica #9002:  Increasing bid to 500
+2022/11/26 14:49:02 Replica #9000:  Increasing bid to 500
+2022/11/26 14:49:02 Replica #9001:  Increasing bid to 500
+2022/11/26 14:49:02 User Johan has succesfully bid 500 
+2022/11/26 14:49:04 User %!d(string=Jakob) attempting to request result from replicas.
+2022/11/26 14:49:04 Replica #9002: Result requested from user, answering with result message.
+2022/11/26 14:49:04 Replica #9000: Result requested from user, answering with result message.
+2022/11/26 14:49:04 Replica #9001: Result requested from user, answering with result message.
+2022/11/26 14:49:06 User Jakob attempting to bid with bid 800
+2022/11/26 14:49:06 Replica #9000:  Increasing bid to 800
+2022/11/26 14:49:06 Replica #9001:  Increasing bid to 800
+2022/11/26 14:49:06 Replica #9002:  Increasing bid to 800
+2022/11/26 14:49:06 User Jakob has succesfully bid 800 
+2022/11/26 14:49:08 User %!d(string=Johan) attempting to request result from replicas.
+2022/11/26 14:49:08 Replica #9000: Result requested from user, answering with result message.
+2022/11/26 14:49:08 Replica #9001: Result requested from user, answering with result message.
+2022/11/26 14:49:08 Replica #9002: Result requested from user, answering with result message.
+2022/11/26 14:49:13 User Johan attempting to bid with bid 700
+2022/11/26 14:49:13 User Johan attempted to bid 700, but bid was not high enough. 
+2022/11/26 14:49:16 User Johan attempting to bid with bid 850
+2022/11/26 14:49:16 Replica #9000:  Increasing bid to 850
+2022/11/26 14:49:16 Replica #9001:  Increasing bid to 850
+2022/11/26 14:49:16 Replica #9002:  Increasing bid to 850
+2022/11/26 14:49:16 User Johan has succesfully bid 850 
+2022/11/26 14:49:18 User %!d(string=Jakob) attempting to request result from replicas.
+2022/11/26 14:49:18 Replica #9000: Result requested from user, answering with result message.
+2022/11/26 14:49:18 Replica #9001: Result requested from user, answering with result message.
+2022/11/26 14:49:18 Replica #9002: Result requested from user, answering with result message.
+2022/11/26 14:50:31 User %!d(string=Jakob) attempting to request result from replicas.
+2022/11/26 14:50:31 Replica #9000: Result requested from user, answering with result message.
+2022/11/26 14:50:31 Replica #9001: Result requested from user, answering with result message.
+2022/11/26 14:50:31 Replica #9002: Result requested from user, answering with result message.
+2022/11/26 14:50:37 User Jakob attempting to bid with bid 500
+2022/11/26 14:50:37 Replica #9000:  Timelimit reached, auction ending.
+2022/11/26 14:50:37 Replica #9001:  Timelimit reached, auction ending.
+2022/11/26 14:50:37 Replica #9002:  Timelimit reached, auction ending.
+2022/11/26 14:50:38 User %!d(string=Jakob) attempting to request result from replicas.
+2022/11/26 14:50:38 Replica #9001: Result requested from user, answering with result message.
+2022/11/26 14:50:38 Replica #9002: Result requested from user, answering with result message.
+2022/11/26 14:50:38 Replica #9000: Result requested from user, answering with result message.
+2022/11/26 14:50:41 User %!d(string=Johan) attempting to request result from replicas.
+2022/11/26 14:50:41 Replica #9000: Result requested from user, answering with result message.
+2022/11/26 14:50:41 Replica #9001: Result requested from user, answering with result message.
+2022/11/26 14:50:41 Replica #9002: Result requested from user, answering with result message.

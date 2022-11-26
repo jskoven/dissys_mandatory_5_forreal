@@ -15,13 +15,20 @@ import (
 	"google.golang.org/grpc"
 )
 
+var (
+	timestamp time.Time
+	timeLimit time.Time
+)
+
 func main() {
+	f, err := os.OpenFile("logs.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
+	if err != nil {
+		log.Printf("Eror on opening file: %s", err)
+	}
+	log.SetOutput(f)
 	arg1, _ := strconv.ParseInt(os.Args[1], 10, 32)
 	ownPort := int32(arg1) + 9000
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", ownPort))
-	log.Println()
-	log.Println()
-	log.Printf("### Logs for chat session started at: %s ###", time.Now())
 	log.Printf("Starting server...")
 
 	if err != nil {
@@ -34,14 +41,16 @@ func main() {
 
 	server := Biddinghouse{}
 	server.currentbid = 0
-	server.itemprice = 500
-	server.winner = "None have won yet!"
+	server.winner = "none yet"
+	server.id = ownPort
 	replication.RegisterReplicationServer(grpcserver, &server)
 
 	err = grpcserver.Serve(listener)
 	if err != nil {
-		log.Printf("Failed to serve with listener, error: %s", err)
+		log.Printf("Replica #%d:  Failed to serve with listener, error: %s\n", server.id, err)
+
 	}
+	timeLimit = timestamp.Add(time.Duration(50000) * time.Minute)
 
 }
 
@@ -51,13 +60,22 @@ type Biddinghouse struct {
 	winner     string
 	mux        sync.Mutex
 	replication.UnimplementedReplicationServer
+	id int32
 }
 
 func (b *Biddinghouse) Receivebid(ctx context.Context, bid *replication.BidPackage) (con *replication.Confirmation, err error) {
 	bidFromBidder := bid.Bid
 	conpackage := &replication.Confirmation{}
-	if bidFromBidder > b.currentbid {
+	if b.currentbid == 0 {
+		timestamp = time.Now()
+		timeLimit = timestamp.Add(time.Duration(20) * time.Second)
+	}
+	if timeLimit.Before(time.Now()) {
+		log.Printf("Replica #%d:  Timelimit reached, auction ending.\n", b.id)
+		conpackage.HasEnded = true
+	} else if bidFromBidder > b.currentbid {
 		//Increase bid
+		log.Printf("Replica #%d:  Increasing bid to %d\n", b.id, bidFromBidder)
 		b.mux.Lock()
 		b.currentbid = bid.Bid
 		b.winner = bid.Bidder
@@ -65,20 +83,26 @@ func (b *Biddinghouse) Receivebid(ctx context.Context, bid *replication.BidPacka
 		conpackage.CurrentPrice = b.currentbid
 		b.mux.Unlock()
 		conpackage.Confirmation = true
-
 	} else {
 		//Bid not high enough
 		conpackage.Confirmation = false
+		b.mux.Lock()
+		conpackage.CurrentWinner = b.winner
+		conpackage.CurrentPrice = b.currentbid
+		b.mux.Unlock()
 	}
 	return conpackage, nil
 }
 
 func (b *Biddinghouse) Result(ctx context.Context, empty *replication.Empty) (res *replication.ResultPackage, err error) {
+	log.Printf("Replica #%d: Result requested from user, answering with result message.\n", b.id)
 	resultPackage := &replication.ResultPackage{}
-	if b.currentbid < b.itemprice {
-		resultPackage.Highestbid = b.currentbid
+	resultPackage.Winner = b.winner
+	resultPackage.Highestbid = b.currentbid
+	if timeLimit.Before(time.Now()) {
+		resultPackage.HasEnded = true
 	} else {
-		resultPackage.Winner = b.winner
+		resultPackage.HasEnded = false
 	}
 	return resultPackage, nil
 

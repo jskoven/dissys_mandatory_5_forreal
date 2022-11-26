@@ -19,6 +19,7 @@ message confirmation{
     bool confirmation = 1;
     int32 currentPrice = 2;
     string currentWinner = 3;
+    bool hasEnded = 4;
 }
 
 message resultPackage{
