@@ -43,6 +43,7 @@ func main() {
 	server.currentbid = 0
 	server.winner = "none yet"
 	server.id = ownPort
+	server.bidders = make(map[string]string)
 	replication.RegisterReplicationServer(grpcserver, &server)
 
 	err = grpcserver.Serve(listener)
@@ -50,7 +51,7 @@ func main() {
 		log.Printf("Replica #%d:  Failed to serve with listener, error: %s\n", server.id, err)
 
 	}
-	timeLimit = timestamp.Add(time.Duration(50000) * time.Minute)
+	timeLimit = timestamp.Add(time.Duration(500) * time.Minute)
 
 }
 
@@ -60,7 +61,8 @@ type Biddinghouse struct {
 	winner     string
 	mux        sync.Mutex
 	replication.UnimplementedReplicationServer
-	id int32
+	id      int32
+	bidders map[string]string
 }
 
 func (b *Biddinghouse) Receivebid(ctx context.Context, bid *replication.BidPackage) (con *replication.Confirmation, err error) {
@@ -68,7 +70,7 @@ func (b *Biddinghouse) Receivebid(ctx context.Context, bid *replication.BidPacka
 	conpackage := &replication.Confirmation{}
 	if b.currentbid == 0 {
 		timestamp = time.Now()
-		timeLimit = timestamp.Add(time.Duration(20) * time.Second)
+		timeLimit = timestamp.Add(time.Duration(1) * time.Minute)
 	}
 	if timeLimit.Before(time.Now()) {
 		log.Printf("Replica #%d:  Timelimit reached, auction ending.\n", b.id)
@@ -90,6 +92,10 @@ func (b *Biddinghouse) Receivebid(ctx context.Context, bid *replication.BidPacka
 		conpackage.CurrentWinner = b.winner
 		conpackage.CurrentPrice = b.currentbid
 		b.mux.Unlock()
+	}
+	if b.bidders[bid.Bidder] == "" {
+		b.bidders[bid.Bidder] = bid.Bidder
+		log.Printf("Replica #%d:  New user detected, adding \"%s\" to list of users.", b.id, bid.Bidder)
 	}
 	return conpackage, nil
 }

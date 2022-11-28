@@ -62,7 +62,9 @@ func main() {
 		switch MessageToBeSent {
 		case "result":
 			result := b.result()
-			if result.HasEnded {
+			if result.Highestbid == 0 {
+				fmt.Printf("No one has bid on the auction yet, and the timer hasn't started.\n")
+			} else if result.HasEnded {
 				fmt.Printf("Auction has been closed. The winner is %s with a bid of %d! \n", result.Winner, result.Highestbid)
 			} else {
 				fmt.Printf("Current highest bid is %d from user %s \n", result.Highestbid, result.Winner)
@@ -72,7 +74,7 @@ func main() {
 			Scanner.Scan()
 			toBid := Scanner.Text()
 			toBidInInt, err := strconv.Atoi(toBid)
-			if err != nil {
+			if err != nil || toBidInInt == 0 {
 				fmt.Println("Bid failed, please try again with a whole number")
 				continue
 			}
@@ -126,13 +128,15 @@ func (b *bidder) result() replication.ResultPackage {
 	empty := replication.Empty{}
 	result := replication.ResultPackage{}
 
-	for _, element := range b.replicas {
+	for index, element := range b.replicas {
 		answer, err := element.Result(context.Background(), &empty)
 		if err != nil {
+			log.Printf("## Replica number %d is down, skipping it.##\n", index)
+		} else {
+			result.Highestbid = answer.Highestbid
+			result.Winner = answer.Winner
+			result.HasEnded = answer.HasEnded
 		}
-		result.Highestbid = answer.Highestbid
-		result.Winner = answer.Winner
-		result.HasEnded = answer.HasEnded
 	}
 
 	return result
