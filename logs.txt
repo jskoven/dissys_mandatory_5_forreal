@@ -61,4 +61,60 @@
 2022/11/28 15:42:07 User Peter attempting to request result from replicas.
 2022/11/28 15:42:07 Replica #9000: Result requested from user, answering with result message.
 2022/11/28 15:42:07 Replica #9001: Result requested from user, answering with result message.
-2022/11/28 15:42:09 ## Replica number 9002 is down, skipping it.##
+2022/11/28 15:42:09 ## Replica number 9002 is down, skipping it.##2022/11/29 15:24:08 Starting server...
+2022/11/29 15:24:08 Listening on port :9002
+2022/11/29 15:24:08 Starting server...
+2022/11/29 15:24:08 Listening on port :9001
+2022/11/29 15:24:08 Starting server...
+2022/11/29 15:24:08 Listening on port :9000
+2022/11/29 15:24:26 Client Niels connected to port 9000 
+2022/11/29 15:24:26 Client Niels connected to port 9001 
+2022/11/29 15:24:26 Client Niels connected to port 9002 
+2022/11/29 15:24:28 Client Jonas connected to port 9000 
+2022/11/29 15:24:28 Client Jonas connected to port 9001 
+2022/11/29 15:24:28 Client Jonas connected to port 9002 
+2022/11/29 15:24:32 User Jonas attempting to bid with bid 600
+2022/11/29 15:24:32 Replica #9000:  Increasing bid to 600
+2022/11/29 15:24:32 Replica #9000:  New user detected, adding "Jonas" to list of users.
+2022/11/29 15:24:32 Replica #9001:  Increasing bid to 600
+2022/11/29 15:24:32 Replica #9001:  New user detected, adding "Jonas" to list of users.
+2022/11/29 15:24:32 Replica #9002:  Increasing bid to 600
+2022/11/29 15:24:32 Replica #9002:  New user detected, adding "Jonas" to list of users.
+2022/11/29 15:24:32 User Jonas has succesfully bid 600 
+2022/11/29 15:24:34 User Niels attempting to request result from replicas.
+2022/11/29 15:24:34 Replica #9000: Result requested from user, answering with result message.
+2022/11/29 15:24:34 Replica #9001: Result requested from user, answering with result message.
+2022/11/29 15:24:34 Replica #9002: Result requested from user, answering with result message.
+2022/11/29 15:24:37 User Niels attempting to bid with bid 650
+2022/11/29 15:24:37 Replica #9002:  Increasing bid to 650
+2022/11/29 15:24:37 Replica #9002:  New user detected, adding "Niels" to list of users.
+2022/11/29 15:24:37 Replica #9000:  Increasing bid to 650
+2022/11/29 15:24:37 Replica #9000:  New user detected, adding "Niels" to list of users.
+2022/11/29 15:24:37 Replica #9001:  Increasing bid to 650
+2022/11/29 15:24:37 Replica #9001:  New user detected, adding "Niels" to list of users.
+2022/11/29 15:24:37 User Niels has succesfully bid 650 
+2022/11/29 15:24:43 User Jonas attempting to bid with bid 625
+2022/11/29 15:24:43 User Jonas attempted to bid 625, but bid was not high enough. 
+2022/11/29 15:24:51 User Jonas attempting to bid with bid 675
+2022/11/29 15:24:51 Replica #9002:  Increasing bid to 675
+2022/11/29 15:24:51 Replica #9000:  Increasing bid to 675
+2022/11/29 15:24:51 Replica #9001:  Increasing bid to 675
+2022/11/29 15:24:51 User Jonas has succesfully bid 675 
+2022/11/29 15:24:59 User Jonas attempting to request result from replicas.
+2022/11/29 15:25:01 ## Replica number 9000 is down, skipping it.##
+2022/11/29 15:25:01 Replica #9001: Result requested from user, answering with result message.
+2022/11/29 15:25:01 Replica #9002: Result requested from user, answering with result message.
+2022/11/29 15:25:05 User Niels attempting to bid with bid 800
+2022/11/29 15:25:07 ## Replica number 9000 is down, skipping it.##
+2022/11/29 15:25:07 Replica #9001:  Increasing bid to 800
+2022/11/29 15:25:07 Replica #9002:  Increasing bid to 800
+2022/11/29 15:25:07 User Niels has succesfully bid 800 
+2022/11/29 15:25:08 User Jonas attempting to request result from replicas.
+2022/11/29 15:25:10 ## Replica number 9000 is down, skipping it.##
+2022/11/29 15:25:10 Replica #9001: Result requested from user, answering with result message.
+2022/11/29 15:25:10 Replica #9002: Result requested from user, answering with result message.
+2022/11/29 15:25:14 User Jonas attempting to bid with bid 900
+2022/11/29 15:25:16 ## Replica number 9000 is down, skipping it.##
+2022/11/29 15:25:16 Replica #9001:  Increasing bid to 900
+2022/11/29 15:25:16 Replica #9002:  Increasing bid to 900
+2022/11/29 15:25:16 User Jonas has succesfully bid 900 
