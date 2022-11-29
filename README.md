@@ -9,3 +9,5 @@ then be printed in the terminal. The user will be prompted to write their userna
 
 To simulate the program being resilient to a crash, one of the terminals running one of the servers can simply be closed, either by just
 closing the terminal or pressing Ctrl+C in the terminal. 
+
+If another auction needs to be started, the servers needs to be closed and started again. No functionality to restart auctions have been implemented.
